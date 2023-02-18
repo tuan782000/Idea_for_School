@@ -1,6 +1,6 @@
-# Food
+# IDS school Group 12
 
-#Some pictures related to the project.
+#build a secure web-enabled role-based system for collecting ideas for improvement from staff in a large University. .
 
 ## Home Page
 
