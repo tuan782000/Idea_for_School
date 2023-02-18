@@ -1,0 +1,59 @@
+﻿@model IDS_School.Models.Chat
+
+@{
+    ViewData["Title"] = "Chat";
+    Layout = "~/Views/Shared/_Layout_Chat.cshtml";
+    var getRoom = (List<Chat>)ViewData["getRoom"];
+}
+<h1 style="text-align:center; background-color: #373554; color:white">Your are in room @Model.Name</h1>
+<div class="main">
+    <div class="side-menu">
+        <a class="room-button" asp-controller="HomeChat" asp-action="Index">
+            Home
+        </a>
+        <a class="room-button" asp-controller="HomeChat"  asp-action="Chat" asp-route-id="@Model.Id">
+            @Model.Name
+        </a>
+        @*@foreach (var eachRoom in getRoom)
+        {
+            <a class="room-button" asp-controller="HomeChat" asp-action="Chat" asp-route-id="@eachRoom.Id">
+                @eachRoom.Name
+            </a>}*@
+
+        @*<a class="room-button" id="create-room-btn" href="#">
+            <strong>+</strong>
+        </a>*@
+    </div>
+
+    @*<div class="modal" id="create-room-modal">
+            <form asp-controller="HomeChat" asp-action="CreateRoom" class="modal-body">
+                <button type="button" class="close" onclick="closeModal()">X</button>
+                <header>Create Room</header>
+                <div>
+                    <input name="name" />
+                </div>
+                <footer>
+                    <button>Create</button>
+                </footer>
+            </form>
+        </div>*@
+
+
+<div class="chat-body">
+    @foreach (var message in Model.Messages)
+    {
+        <div class="message">
+            <header>@message.Name:</header>
+            <p>@message.Text</p>
+            <footer>@message.Timestamp</footer>
+        </div>
+    }
+    <form class="chat-input" asp-controller="HomeChat" asp-action="CreateMessage">
+        <input type="hidden" name="chatId" value="@Model.Id">
+        <input type="text" name="message" id="message-input">
+        <button type="submit">Send</button>
+    </form>
+</div>
+    
+</div>
+<script src="~/js/New_chat.js"></script>

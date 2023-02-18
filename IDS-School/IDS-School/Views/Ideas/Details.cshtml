@@ -1,0 +1,159 @@
+﻿@model IDS_School.Models.Idea
+
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_layout_Admin.cshtml";
+    var countLike = ViewData["countLike"];
+    var countDislike = ViewData["countDislike"];
+    var anoyid = ViewData["anonymousId"];
+    var comments = (List<Comment>)ViewData["comments"];
+    var replies = (List<Reply>)ViewData["replies"];
+}
+
+<div class="content-wrapper">
+    <h1>@Html.DisplayFor(model => model.Title)</h1>
+    <div class="card-header">
+        <div><h3 class="card-title">@Html.DisplayFor(model => model.Description)</h3></div>
+        <div>
+            @if (Model.isAnoymous == true)
+            {
+                <p>posted by anoymous</p>
+            }
+            else
+            {
+                <p>post by @Html.DisplayFor(model => model.User.Email)</p>
+            }
+        </div>
+    </div>
+
+    <div class="card-body">
+        <dl class="row">
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Content)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Content)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreatedDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LastModifiedDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.LastModifiedDate)
+            </dd>
+        </dl>
+
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+
+        <form asp-action="Like">
+            <input type="hidden" name="ideaId" value="@Model.Id" />
+
+            <button class="btn btn-outline-primary fas fa-thumbs-up" style="margin-top:2%;margin-bottom:4px" type="submit" name="getReaction" value="Like"> Like | @countLike</button>
+            @*<span>Like Number: @countLike</span>*@
+
+            @*<input type="submit" name="getReaction" value="Dislike"/>*@
+            <button class="btn btn-outline-danger fas fa-thumbs-down" style="margin-top:2%;margin-bottom:4px" type="submit" name="getReaction" value="Dislike"> Dislike |  @countDislike</button>
+            @*<span>Dislike Number: @countDislike</span>*@
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <ul class="products-list product-list-in-card pl-2 pr-2">
+                @foreach (var comment in comments)
+                {
+                    @if (comment.IsAnoymousComment == true)
+                    {
+                        <li class="item">
+                            <span class="product-description">@comment.Content - posted by @anoyid @comment.CreatedDate</span>
+                            <div data-toggle="collapse" data-target="#replyMess_@comment.Id" aria-expanded="false" aria-controls="replyMess_@comment.Id" class="text-primary">Reply</div>
+                            <div class="card-body collapse multi-collapse" id="replyMess_@comment.Id">
+                                <form asp-action="Reply">
+                                    <div class="input-group">
+
+                                        <input type="text" name="replyMessage" placeholder="Type Message ..." class="form-control">
+                                        <div class="icheck-primary d-inline">
+                                            <input type="checkbox" id="checkboxPrimary_@comment.Id" name="isAnoymous" value="true">
+                                            <input type="hidden" value="false" name="isAnoymous" />
+                                            <label for="checkboxPrimary_@comment.Id">Comment as an anonymous ?</label>
+                                        </div>
+                                        <span class="input-group-append">
+                                            <input type="hidden" name="CommentId" value="@comment.Id" />
+                                            <input type="hidden" name="ideaId" value="@Model.Id" />
+                                            <input type="submit" value="Send" class="btn btn-warning" />
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="item">
+                            <span class="product-description">@comment.Content - posted by @comment.User.Email @comment.CreatedDate</span>
+                            <div data-toggle="collapse" data-target="#replyMess_@comment.Id" aria-expanded="false" aria-controls="replyMess_@comment.Id" class="text-primary">Reply</div>
+                            <div class="card-body collapse multi-collapse" id="replyMess_@comment.Id">
+                                <form asp-action="Reply">
+                                    <div class="input-group">
+                                        <input type="hidden" asp-for="@comment.Id" />
+                                        <input type="text" name="replyMessage" placeholder="Type Message ..." class="form-control">
+                                        <div class="icheck-primary d-inline">
+                                            <input type="checkbox" id="checkboxPrimary_@comment.Id" name="isAnoymous" value="true">
+                                            <input type="hidden" value="false" name="isAnoymous" />
+                                            <label for="checkboxPrimary_@comment.Id">Comment as an anonymous ?</label>
+                                        </div>
+                                        <span class="input-group-append">
+                                            <input type="hidden" name="CommentId" value="@comment.Id" />
+                                            <input type="hidden" name="ideaId" value="@Model.Id" />
+                                            <input type="submit" value="Send" class="btn btn-warning" />
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+                    }
+                }
+
+                @foreach (var reply in replies)
+                {
+                    @if (reply.IsAnoymousReply == true)
+                    {
+                        <li class="item">
+                            <span class="product-description">reply to @reply.Comment.User.Email:  @reply.Content - by anoymous @reply.CreatedDate</span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="item">
+                            <span class="product-description">reply to @reply.Comment.User.Email:   @reply.Content -  by @reply.User.Email @reply.CreatedDate</span>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <div class="card-footer">
+            <form asp-action="Comment">
+                <div class="input-group">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="text" name="message" placeholder="Type Message ..." class="form-control">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox" id="checkboxPrimary" name="isAnoymous" value="true">
+                        <input type="hidden" value="false" name="isAnoymous" />
+                        <label for="checkboxPrimary">Comment as an anonymous ?</label>
+                    </div>
+                    <span class="input-group-append">
+                        <input type="submit" value="Send" class="btn btn-warning" />
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

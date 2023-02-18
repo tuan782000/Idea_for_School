@@ -1,0 +1,64 @@
+﻿@model IDS_School.Models.CUser
+
+@{ ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_layout_Admin.cshtml";
+    var RemainingRoleIds = (List<string>)ViewData["RemainingRoleIds"];
+    var CurrentRoleIds = (List<string>)ViewData["CurrentRoleIds"]; }
+
+<div class="content-wrapper">
+    <table class="table table-bordered">
+        <tr>
+            <th>Current Roles</th>
+        </tr>
+        @if (CurrentRoleIds.Count() == 0)
+        {
+            <tr><td colspan="2">There is no role.</td></tr>
+        }
+        else
+        {
+            foreach (var role in CurrentRoleIds)
+            {
+                <tr>
+                    <td>@role</td>
+                    <td></td>
+                    <td>
+                        <form asp-action="RemoveRole">
+                            <input type="hidden" name="roleId" value="@role" />
+                            <input type="hidden" name="userId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <table class="table table-bordered">
+        <tr>
+            <th>Remaining Roles</th>
+            <th></th>
+        </tr>
+        @if (RemainingRoleIds.Count() == 0)
+        {
+            <tr><td colspan="2">There is no remaining role.</td></tr>
+        }
+        else
+        {
+            foreach (var role in RemainingRoleIds)
+            {
+                <tr>
+                    <td>@role</td>
+                    <td>
+                        <form asp-action="AddRole">
+                            <input type="hidden" name="roleId" value="@role" />
+                            <input type="hidden" name="userId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-success">Add</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

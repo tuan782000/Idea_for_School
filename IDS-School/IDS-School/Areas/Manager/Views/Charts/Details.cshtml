@@ -1,0 +1,88 @@
+﻿@*@model IDS_School.Models.Submission*@
+@model IEnumerable<IDS_School.Models.Idea>
+
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_layout_Admin.cshtml";
+    var countIdea = ViewData["countIdea"];
+}
+@if (Model.Count() > 0)
+{
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Total Ideas : @countIdea</h3>
+                        @if (Model.First().Submission.ClosureDate >= DateTime.Now)
+                        {
+                            <div class="card-tools">
+                                <a asp-action="CreateIdea" asp-route-submissionid="@ViewBag.SubmissionId" btn btn-success btn-sm" style="width: 50px;" placeholder="Create new"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                            </div>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark" style="margin-left: 226px;">
+                                Submit Idea is Closing. You still can view and comment in Idea.
+                            </span>
+                        }
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th> Title</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            @*asp-action="IdeaData" asp-route-id="@item.Id"*@
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="col-5"> @Html.DisplayFor(modelItem => item.Title)</td>                                        
+                                        <td class="col-2">
+                                            <div class="card card-primary collapsed-card">
+                                                <div class="card-header">
+                                                    <div class="card-tools">
+                                                        <a class="btn btn-primary" onclick="getValue(@item.Id)" placeholder="Detail" data-card-widget="collapse"> <i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                        @* @Html.ActionLink("Button Name", "IdeaData", "ChartsController", new { @id = item.Id}, new { @class="classname"  })*@
+                                                    </div>
+                                                </div>
+                                                <div class="card-body" style="display: none;">
+                                                    <div id="chart_div_@item.Id"></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="content-wrapper">
+        <div class="card-header">
+            <div class="alert alert-warning" role="alert">
+                None Idea Right Now. <a asp-action="CreateIdea" asp-route-submissionid="@ViewBag.SubmissionId" btn btn-success btn-sm" style="width: 50px;">Create One Here !</a>
+            </div>
+        </div>
+    </div>
+}
+<p>
+    <a asp-action="Index">Back to list</a>
+</p>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="~/js/site.js"></script>

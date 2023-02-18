@@ -1,0 +1,55 @@
+﻿@model IEnumerable<IDS_School.Models.Submission>
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_layout_Admin.cshtml";
+}
+<div class="content-wrapper">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">List of Ideas Submissions</h3>
+                    <div class="card-tools">
+                        <a asp-action="Create" class="btn btn-success btn-sm" style="width: 50px;" placeholder="Create new"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                    <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                                <th>@Html.DisplayNameFor(model => model.Description)</th>
+                                <th> @Html.DisplayNameFor(model => model.ClosureDate)</th>
+                                <th> @Html.DisplayNameFor(model => model.FinalClosureDate)</th>
+                                @*<th> @Html.DisplayNameFor(model => model.CreationDay)</th>*@
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                            <tr>
+                                <td class="col-2">@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td class="col-2">@Html.DisplayFor(modelItem => item.Description)</td>
+                                <td class="col-2"> @Html.DisplayFor(modelItem => item.ClosureDate)</td>
+                                <td class="col-2"> @Html.DisplayFor(modelItem => item.FinalClosureDate)</td>
+                                @*<td class="col-2">@Html.DisplayFor(modelItem => item.CreationDay)</td>*@
+                                <td class="col-2">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" placeholder="Edit"> <i class="fa fa-edit" style="color:white;" aria-hidden="true"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary" placeholder="Detail"> <i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" placeholder="Delete"> <i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+</div>

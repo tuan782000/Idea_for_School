@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IDS SChool</title>
+
+    <link rel="stylesheet" href="~/css/StyleSheet.css">
+    <link href="~/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="navbar">
+
+    </div>
+
+
+    <div class="main">
+        @*<div class="side-menu">
+
+                <a class="room-button" href="#">
+                    Room 1
+                </a>
+
+                <a class="room-button" id="create-room-btn" href="#">
+                    <strong>+</strong>
+                </a>
+            </div>*@
+
+        @*<vc:room></vc:room>*@
+
+        <div class="chat">
+            @RenderBody()
+        </div>
+    </div>
+    @*<div class="modal" id="create-room-modal">
+            <form asp-controller="HomeChat" asp-action="CreateRoom" class="modal-body">
+                <button type="button" class="close" onclick="closeModal()">X</button>
+                <header>Create Room</header>
+                <div>
+                    <input name="name" />
+                </div>
+                <footer>
+                    <button>Create</button>
+                </footer>
+            </form>
+        </div>*@
+
+    @*<script src="~/js/New_chat.js"></script>*@
+    @RenderSection("Scripts", false)
+</body>
+
+</html>

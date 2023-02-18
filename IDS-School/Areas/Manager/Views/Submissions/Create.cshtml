@@ -1,0 +1,52 @@
+﻿@model IDS_School.Models.Submission
+
+@{
+    ViewData["Title"] = "Create";
+    var localDateTime = ViewData["localDateTime"];
+    Layout = "~/Areas/Admin/Views/Shared/_layout_Admin.cshtml";
+}
+
+<div class="content-wrapper">
+    <div class="card-header">
+        <h3 class="card-title">Create Ideas Submission</h3>
+    </div>
+    <div style="margin-left:20px; color:red;" class="@(String.IsNullOrEmpty(ViewBag.Error) ? "d-none" : "")">@ViewBag.Error</div>
+    <div class="card-body">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Starting Date</label>
+                @*<input asp-for="CreatedDate" class="form-control"/>*@
+                @Html.TextBoxFor(Model => Model.CreatedDate, "{0:yyyy-MM-dd}", new { @id = "createDate", @class = "form-control", @type = "date", @min = Model.CreatedDate.ToString("yyyy-MM-dd"), @max = Model.CreatedDate.AddDays(2).ToString("yyyy-MM-dd") })
+                @*<span asp-validation-for="CreatedDate" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label class="control-label">Closure Date 1</label>
+                @Html.TextBoxFor(Model => Model.ClosureDate, new { @id = "closureDate", @class = "form-control", @type = "date", @min = Model.CreatedDate.ToString("yyyy-MM-dd") })
+                @*<input asp-for="ClosureDate" id="date" value=@Model.ClosureDate max=@Model.ClosureDate.AddDays(7).ToString("yyyy-MM-dd") class="form-control" />
+            <span asp-validation-for="ClosureDate" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <label class="control-label">Final Closure Date</label>
+                @Html.TextBoxFor(Model => Model.FinalClosureDate, new { @id = "finalclosuredate", @class = "form-control", @type = "date", @min = Model.CreatedDate.ToString("yyyy-MM-dd") })
+                @*<input asp-for="FinalClosureDate" class="form-control" />
+            <span asp-validation-for="FinalClosureDate" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success" />
+            </div>
+            <a asp-action="Index" class="btn btn-primary">Back to list</a>
+        </form>
+    </div>
+</div>
+

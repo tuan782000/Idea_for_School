@@ -1,0 +1,149 @@
+﻿@*@model IDS_School.Models.Submission*@
+@model IDS_School.Service.PaginatedList<IDS_School.Models.Idea>
+
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_layout_Admin.cshtml";
+}
+@if (Model.Count() > 0)
+{
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">List of Idea</h3>
+                        @if (Model.First().Submission.ClosureDate >= DateTime.Now)
+                        {
+                            <div class="card-tools">
+                                <a asp-action="CreateIdea" asp-route-submissionid="@ViewBag.SubmissionId" class="btn btn-success btn-sm" style="width: 50px;" placeholder="Create new"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                            </div>
+                        }
+                        else if (Model.First().Submission.ClosureDate < DateTime.Now && Model.First().Submission.FinalClosureDate >= DateTime.Now)
+                        {
+                            <span class="badge bg-warning text-dark" style="margin-left: 226px;">
+                                Submit Idea is Closing. You still can view and comment in Idea.
+                            </span>
+                        }
+                        else if (Model.First().Submission.ClosureDate < DateTime.Now && Model.First().Submission.FinalClosureDate < DateTime.Now)
+                        {
+                            <span class="badge bg-warning text-dark" style="margin-left: 226px;">
+                                Submit Idea is Closing. You still can view Idea.
+                            </span>
+                        }
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-hover text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th> Title</th>
+                                    @*<th> @Html.DisplayNameFor(model => model.LastModifiedDate)</th>*@
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="col-5"> @Html.DisplayFor(modelItem => item.Title)</td>
+                                        <td class="col-5"> @Html.DisplayFor(modelItem => item.LastModifiedDate)</td>
+                                        <td class="col-2">
+                                            <a asp-action="DetailIdea" asp-route-id="@item.Id" class="btn btn-primary" placeholder="Detail"> <i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a asp-action="ViewIdea" asp-route-id="@item.Id" hidden ></a>
+                                        </td>
+                                    </tr>
+                                }
+                                @{ var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                                    var nextDisabled = !Model.HasNextPage ? "disabled" : ""; }
+                            </tbody>
+                        </table>
+                        <div>
+                            <nav>
+                                <ul class="pagination">
+                                    <li>
+                                        @*<a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            </a>*@
+                                        <a asp-action="Details"
+                                           asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                           asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                           class="btn btn-default @prevDisabled">
+                                            Previous
+                                        </a>
+
+                                    </li>
+                                    @if (Model.PageIndex == 1)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item ">
+                                            <a asp-action="Details"
+                                               asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                               asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                               class="btn btn-default @prevDisabled">
+                                                @(Model.PageIndex - 1)
+                                            </a>
+                                        </li>
+                                    }
+
+                                    <li class="page-item active">
+                                        <a asp-action="Details"
+                                           asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                           asp-route-pageNumber="@(Model.PageIndex)"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                           class="btn btn-default @nextDisabled">@Model.PageIndex</a>
+                                    </li>
+
+                                    <li class="page-item ">
+                                        <a asp-action="Details"
+                                           asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                           asp-route-pageNumber="@(Model.PageIndex + 1)"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                           class="btn btn-default @nextDisabled">
+                                            @(Model.PageIndex + 1)
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        @*<a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            </a>*@
+                                        <a asp-action="Details"
+                                           asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                           asp-route-pageNumber="@(Model.PageIndex + 1)"
+                                           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                           class="btn btn-default @nextDisabled">
+                                            Next
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="content-wrapper">
+        <div class="card-header">
+            <div class="alert alert-warning" role="alert">
+                None Idea Right Now. <a asp-action="CreateIdea" asp-route-submissionid="@ViewBag.SubmissionId" class="btn btn-success btn-sm" style="width: 50px;">Create One Here !</a>
+            </div>
+        </div>
+    </div>
+}
+<p>
+    <a asp-action="Index">Back to list</a>
+</p>
